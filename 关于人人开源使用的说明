@@ -1,0 +1,66 @@
+主要写一写人人开源怎样使用
+
+这个项目做很久了 但是如果让我使用人人开源快速开发还是得看视频，那么，不如写个笔记，记录一下怎么使用
+
+以后自力更生---2020.06.01
+  by:liqiqiorz
+  
+  
+首先是renren-fast的使用：
+
+把renren-fast直接粘贴到项目里面：就像这个项目一样，找到里面的db文件夹，把sql语句执行
+这已经把表权限设计都设计好了 static里面的application就是一些常规配置：mysql,redis,shiro..
+默认使用dev环境，所以在dev.yml里面继续看配置
+
+renrenfast-vue ：npm install就行啦
+
+人人generator:
+
+首先在application.yml里面改mysql配置，生成数据库
+在generator.properties里面mainpath:例如：com.atguigu
+包名模块名
+作者可以填自己信息：比如邮箱
+表前缀改成自己的
+然后启动在80端口启动了直接访问
+在renren-fast里面点所有表民，点生成代码
+点压缩包里面的main resources mapper --mapper文件
+在main java下面就有指定的代码
+将main文件直接粘贴到对应moudle文件 
+然后resources里面有个src里面是前端代码可以删去
+再到java文件夹里面就是生成的业务代码
+
+接下来就是改的过程：
+首先你会看到很多报错
+首先缺少common.utils.pageutils 和query，R工具类 记住这个包名位置，就这样创建
+直接在renren-fast里面的src-main-java-io-renren-common-utils -----找到pageutil和query，R，复制到common模块
+然后一堆mybatis,shrio,,,等等的依赖都没有，建议见一个common moudle来映入这些依赖
+common里面引入mp，lombok , httpcomponents---A为httpcore(这个是R的报错)，还有mysql驱动：mysql:connentor
+然后query报错(org.apache....commons.lang.stringutils)这里依赖再renren-fast的pom里面找到commons-lang
+放到common的pom里面就行
+还有一个SQLFilter(再renren-fast的common-xxs文件夹，整个复制到common模块)
+还有一个Constant再renren-fast utils里面的 Constant复制到common模块的utils
+业务代码还有requiresPermission报错--shiro直接删 其他的controller都会有shiro注解，不想用直接删
+
+此时可以调整一下逆向工程，生成controller取消Shrio注解
+在renren-gengrator(直接复制到子模块就行)找到resource里面的template文件，里面很多vm文件
+找到controller.java.vm 里面都有requiresPermission注解，直接删了就行（注释也行把shiro注解应用也删去
+在重启逆向工程重新生成controller继续生成代码
+此时只需使用controller(当然你也可以在开始使用时直接这么做)就可以替换掉以前的controller
+这时候的业务代码是没有mp的一些注解的，要自己配置一下
+common模块会有servlet异常(在xxsFilter)，在pom里面加servlet-api(A) (gv):javax-servlet version2.5 加个scope是provided:表示打包不需要带上
+因为tomcat里面有 然后可以吧xss里面的xsshttpservletrequire,xssfilter删掉(防攻击的可以在以后用sercurity)
+sqlfilter还会报错：缺少rrexceprion 可以在renren-fast的common-exception里面找到并复制（放utils里面）
+
+报错解决完了要配置业务代码的一些数据库啥的，而且业务类的实体类主键并没有自增为了不再每一个实体类傻逼一样的调整，可以在配置文件
+yml或者properties里面调整db-config id-type:auto（表示自增）
+
+单元测试有个@runwith不用管。。
+然后就可以注入一些service来测试一些crud啦
+
+
+以上，就是逆向工程的使用方法。功能不全自己改
+
+
+
+
+
