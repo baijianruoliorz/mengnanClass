@@ -139,5 +139,4 @@ yml或者properties里面调整db-config id-type:auto（表示自增）
 
 
 
-
-
+放不出来图片，，不怎么会用这里的ide。。可能需要Oss
