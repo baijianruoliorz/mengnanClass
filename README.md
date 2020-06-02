@@ -135,4 +135,9 @@ yml或者properties里面调整db-config id-type:auto（表示自增）
 
 
 
+看了一下readme ,,这是什么魔鬼布置，相信我，我的ide里面是这样写的
+
+
+
+
 
