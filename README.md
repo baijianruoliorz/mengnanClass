@@ -65,3 +65,4 @@ READMEV1.X ---写项目一直在更新一些细节问题
 前端B端：https://github.com/baijianruoliorz/vue-admin
 
 初步接口：
+https://github.com/baijianruoliorz/guli_parent
