@@ -1,158 +1,67 @@
-**项目说明** 
-- 采用SpringBoot、MyBatis、Shiro框架，开发的一套权限系统，极低门槛，拿来即用。设计之初，就非常注重安全性，为企业系统保驾护航，让一切都变得如此简单。
-- 提供了代码生成器，只需编写30%左右代码，其余的代码交给系统自动生成，可快速完成开发任务
-- 支持MySQL、Oracle、SQL Server、PostgreSQL等主流数据库
-<br>
+**首先这个码农很佛，也很弱，重点是弱。**
 
-**具有如下特点** 
-- 灵活的权限控制，可控制到页面或按钮，满足绝大部分的权限需求
-- 完善的部门管理及数据权限，通过注解实现数据权限的控制
-- 完善的XSS防范及脚本过滤，彻底杜绝XSS攻击
-- 支持分布式部署，session存储在redis中
-- 友好的代码结构及注释，便于阅读及二次开发
-- 引入quartz定时任务，可动态完成任务的添加、修改、删除、暂停、恢复及日志查看等功能
-- 页面交互使用Vue2.x，极大的提高了开发效率
-- 引入swagger文档支持，方便编写API接口文档
+唉，因为同学太厉害了啊。。所以显得自己就很弱~
 
-<br>
+下面由liqiqiorz(就是我，嗯）对自己使用的这个框架进行进一步的说明讲解，我的目标是把这个项目开源：即谷粒课堂，不同于教程的
+是，这里面加入了我自己写好的大量注解以及部分方法可能会有多种实现方式，最终把这个项目变成**学习笔记**供以后使用。
 
-**数据权限设计思想** 
-- 管理员管理、角色管理、部门管理，可操作本部门及子部门数据
-- 菜单管理、定时任务、参数管理、字典管理、系统日志，没有数据权限
-- 业务功能，按照用户数据权限，查询、操作数据【没有本部门数据权限，也能查询本人数据】
+所以说这个项目大概是对我之前学习的一个总结，学JAVA之间还学习了GO所以划水了好长时间呢！因为我也已经做过好几个项目了，从入门的博客，到中级的商城，租房，再到分布式的人力资源管理系统
+大多都是跟着教程，而缺乏自己的思考，所以这个项目想对自己更负责任一些，不如把它变成一个我自己的笔记，以后有什么需求再这上面抄抄改改就行了。
+然后这边这个项目的复杂度对我来说也是蛮大的，毕竟是分布式+B2C的一个项目。。
 
-<br> 
+所以开源之后，即使得不到什么支持，总之对自己有利就行~~
 
-**项目结构** 
-```
-renren-security
-├─renren-common     公共模块
-│ 
-├─renren-admin      管理后台
-│    ├─db  数据库SQL脚本
-│    │ 
-│    ├─modules  模块
-│    │    ├─job 定时任务
-│    │    ├─oss 文件存储
-│    │    └─sys 系统管理(核心)
-│    │ 
-│    └─resources 
-│        ├─mapper   MyBatis文件
-│        ├─statics  静态资源
-│        ├─template 系统页面
-│        │    ├─modules      模块页面
-│        │    ├─index.html   AdminLTE主题风格（默认主题）
-│        │    └─index1.html  Layui主题风格
-│        └─application.yml   全局配置文件
-│       
-│ 
-├─renren-api        API服务
-│ 
-├─renren-generator  代码生成器
-│        └─resources 
-│           ├─mapper   MyBatis文件
-│           ├─template 代码生成器模板（可增加或修改相应模板）
-│           ├─application.yml    全局配置文件
-│           └─generator.properties   代码生成器，配置文件
-│
-```
+自己总结了一下写这个项目时所用的技术：后端：springboot+springCloud+mybatisP+mysql+easyExcel+Echarts and so on...
+前端：主要学习了nuxt+vue-admin-template-master模板，也利于SEO，弥补ajax的缺陷，里面囊括的就很多啦
+中间件：这个项目是没有MQ，seata（其实这两个也就是为用而用，会改配置就行，这种在秒杀场景是常客）的，但是加入了微信支付和阿里的Oss和视频点播技术。
+虚拟机可以用也不用，我用的是阿里云的虚拟机完成的（榨干它最后的资本价值~
+设计模式：B2C
 
-<br>
+build目录：一些编译的文件，类似于JAVA中的class文件，不需要去改
+config：配置，项目中最基本配置，比如端口啊环境啊都可以在这里面修改~注意useEslint:false  这个检测的太严格了。。。
+dev 和prop就是些环境，有base_api:可以改成本地默认访问后端地址
+node_moudles:依赖
+src:{#重要的打*
+api:定义要调用的方法*
+assets:静态资源
+components:插件，放一些有趣的小玩意
+icons:图标之类的~
+router:路由*
+store:没啥用
+style:样式
+utils:工具类
+views：项目中的页面部分
+}    ----2020.05.28
+一些小细节：
+console的network会列出所有的请求哦~~
+登陆的话：有两个请求，浏览器中的一种机制，先做一个预请求，先测试是否连通，再请求！
+请注意：配置文件修改的话，必须要重启，如果是其他代码ide会自动编译修改
+所谓配置文件：比如base_url
+network error:网路错误：代码有问题！
+NO 'Access-Control-Allow-Origin'---一般是跨域问题：访问协议，IP，端口号，该框架端口号：9528
+加注解或网关都可以解决呢！
+import .. from 引入其他的JS文件
+传参很多方法的
+第一种就是拼接：直接+就完事了
+第二种:``号里面直接可以{}
+由于后端用的是requestBody获取的对象，所以不用params,而要用data获取数据
+为了防止中文名字，所以Oss里面保存的不是JPG而是PNG
+这里面分类规则是parentId=0
+这个项目：执行全局异常处理就是后台代码的问题，当然可能是前端没有给默认值
+netWork error:未解决跨域/路径写错了/后端更新服务器未重启
+nacos:先引入依赖再配置文件再添加启动类注解就行了。。
+feign再调用端写代码哦~
+引入注册中心不注册的话不能启动会有 no server available的提示呢！
+报错的话多看第一行和最后一行。。
 
- **技术选型：** 
-- 核心框架：Spring Boot 2.1
-- 安全框架：Apache Shiro 1.4
-- 视图框架：Spring MVC 5.0
-- 持久层框架：MyBatis 3.5
-- 定时器：Quartz 2.3
-- 数据库连接池：Druid 1.1
-- 日志管理：SLF4J 1.7、Log4j
-- 页面交互：Vue2.x
+Copyright (c) 2020-present Xiangrui Yang QQ:1099462011
 
-<br>
+这篇READMEv1.0作于---2020.05.28，写项目的第七天。
+READMEV1.X ---写项目一直在更新一些细节问题
+提交于--2020.06.02
 
- **软件需求** 
-- JDK1.8
-- MySQL5.5+
-- Maven3.0+
+前端C端：https://github.com/baijianruoliorz/vue-user
 
-<br>
+前端B端：https://github.com/baijianruoliorz/vue-admin
 
- **本地部署**
-- 通过git下载源码
-- idea、eclipse需安装lombok插件，不然会提示找不到entity的get set方法
-- 创建数据库renren_security，数据库编码为UTF-8
-- 执行db/mysql.sql文件，初始化数据【按需导入表结构及数据】
-- 修改application-dev.yml文件，更新MySQL账号和密码
-- 在renren-security目录下，执行mvn clean install
-<br>
-
-- Eclipse、IDEA运行AdminApplication.java，则可启动项目【renren-admin】
-- renren-admin访问路径：http://localhost:8080/renren-admin
-- swagger文档路径：http://localhost:8080/renren-admin/swagger/index.html
-- swagger注解路径：http://localhost:8080/renren-admin/swagger-ui.html
-- 账号密码：admin/admin
-
-<br>
-
-- Eclipse、IDEA运行ApiApplication.java，则可启动项目【renren-api】
-- renren-api访问路径：http://localhost:8081/renren-api/swagger-ui.html
-
-<br>
-
-- Eclipse、IDEA运行GeneratorApplication.java，则可启动项目【renren-generator】
-- renren-generator访问路径：http://localhost:8082/renren-generator
-
-
-<br>
-
- **集群部署**
-- 集群部署，需要安装redis，并配置redis信息
-- 需要配置【renren.redis.open=true】，表示开启redis缓存
-- 需要配置【renren.cluster=true】，表示开启集群环境
-
-<br>
-
- **项目演示**
-- 演示地址：http://demo.open.renren.io/renren-security
-- 账号密码：admin/admin
-
-<br>
-
-**如何交流、反馈、参与贡献？** 
-- 开发文档：https://www.renren.io/guide/security
-- 官方社区：https://www.renren.io/community
-- gitee仓库：https://gitee.com/renrenio/renren-security
-- github仓库：https://github.com/renrenio/renren-security
-- [人人开源](https://www.renren.io)：https://www.renren.io   
-- 官方QQ群：324780204、145799952
-- 如需关注项目最新动态，请Watch、Star项目，同时也是对项目最好的支持
-- 技术讨论、二次开发等咨询、问题和建议，请移步到官方社区，我会在第一时间进行解答和回复！
-- 微信扫码并关注【人人开源】，获得项目最新动态及更新提醒<br>
-![输入图片说明](http://cdn.renren.io/47c26201804031918312618.jpg "在这里输入图片标题")
-<br>
-<br>
-
-**接口文档效果图：** 
-![输入图片说明](http://cdn.renren.io/img/c8dae596146248d8b4d0639738c2932b "在这里输入图片标题")
-
-<br>
-
-**Layui主题风格：**
-![输入图片说明](http://cdn.renren.io/img/1013aa91fe8542b7b05d82bc9444433a "在这里输入图片标题")
-
-<br>
-
-**AdminLTE主题风格：**
-![输入图片说明](http://cdn.renren.io/img/f9762bc6574545ce908e271995efcf1c "在这里输入图片标题")
-![输入图片说明](http://cdn.renren.io/img/a1b8bf1ea3db4844a8652a9cf84048cc "在这里输入图片标题")
-![输入图片说明](http://cdn.renren.io/img/e542060605f94b3ebec699b0afffc22d "在这里输入图片标题")
-![输入图片说明](http://cdn.renren.io/img/c94be5b4bf0d4387b18e119c91b1a986 "在这里输入图片标题")
-![输入图片说明](http://cdn.renren.io/img/ae8c683a01c74d8dbc52d62547efda31 "在这里输入图片标题")
-![输入图片说明](http://cdn.renren.io/img/ca38bcf3717c427d82dd67d86b744e18 "在这里输入图片标题")
-![输入图片说明](http://cdn.renren.io/img/4862ec46a9ad469b90c30788c4707e35 "在这里输入图片标题")
-![输入图片说明](http://cdn.renren.io/img/5d8e7243d30a4421b90f15394b6d1ccd "在这里输入图片标题")
-
-<br>
-
-![捐赠](http://cdn.renren.io/donate.jpg "捐赠") 
+初步接口：
