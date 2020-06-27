@@ -1,3 +1,9 @@
+![image](https://img.shields.io/badge/version-v1.0-green)
+
+
+![image](https://img.shields.io/badge/author-liqiqiorz-yellow)
+![image](https://img.shields.io/badge/build-passing-brightgreens
+
 **首先这个码农很佛，也很弱，重点是弱。**
 
 唉，因为同学太厉害了啊。。所以显得自己就很弱~
